@@ -372,6 +372,60 @@
   .panel.warn { border-color: rgba(255,182,72,.3); background: linear-gradient(180deg, rgba(255,182,72,.06), transparent); }
   .panel.warn h3 { color: var(--warn); }
 
+  /* ---------- pricing ---------- */
+  .tiers { display: grid; grid-template-columns: repeat(auto-fit, minmax(156px, 1fr)); gap: 12px; }
+  .tier {
+    padding: 20px 14px 18px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--surface);
+    text-align: center;
+    transition: border-color .18s ease, transform .18s ease;
+  }
+  .tier:hover { border-color: var(--line2); transform: translateY(-2px); }
+  .tier .dur {
+    font-family: var(--mono); font-size: 0.7rem; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--ink3);
+  }
+  .tier .amt {
+    font-family: var(--display); font-weight: 800; font-size: 1.55rem;
+    letter-spacing: -0.03em; margin-top: 9px; color: var(--ink);
+  }
+  .tier.best { border-color: var(--accent); background: linear-gradient(180deg, rgba(108,140,255,.11), transparent 70%); }
+  .tier .tag {
+    display: inline-block; margin-top: 10px;
+    font-family: var(--mono); font-size: 0.6rem; letter-spacing: .09em; text-transform: uppercase;
+    color: var(--accent); background: rgba(108,140,255,.15);
+    padding: 3px 9px; border-radius: 99px;
+  }
+  .included { margin-top: 22px; display: flex; flex-wrap: wrap; gap: 8px 22px; }
+  .included span { font-size: 0.89rem; color: var(--ink2); }
+  .included b { color: var(--accent); font-weight: 600; }
+
+  /* ---------- contact ---------- */
+  .contact {
+    display: grid; grid-template-columns: minmax(0,1fr) auto;
+    gap: 24px; align-items: center;
+    padding: clamp(22px,3vw,30px);
+    border: 1px solid var(--line2); border-radius: 16px;
+    background: linear-gradient(150deg, #171C2B, #0D1017);
+  }
+  @media (max-width: 720px) { .contact { grid-template-columns: minmax(0,1fr); } }
+  .handle {
+    display: inline-flex; align-items: center; gap: 10px;
+    margin-top: 14px; padding: 10px 14px;
+    border: 1px solid var(--line2); border-radius: 10px;
+    background: #0E1119;
+    font-family: var(--mono); font-size: 0.95rem; color: var(--ink);
+  }
+  .handle button {
+    font-family: var(--body); font-size: 0.76rem; font-weight: 600;
+    color: var(--ink2); background: var(--surface2);
+    border: 1px solid var(--line2); border-radius: 6px;
+    padding: 4px 10px; cursor: pointer;
+  }
+  .handle button:hover { color: var(--ink); border-color: #3C4560; }
+
   /* ---------- get it ---------- */
   .get { border: 1px solid var(--line2); border-radius: 16px; padding: clamp(24px,4vw,40px); background: linear-gradient(150deg, #151A27, #0D1017); }
   .specs { display: flex; flex-wrap: wrap; gap: 10px 26px; margin-top: 22px; font-family: var(--mono); font-size: 0.78rem; color: var(--ink3); }
@@ -396,7 +450,7 @@
     <nav>
       <a class="hide-sm" href="#how">How it works</a>
       <a class="hide-sm" href="#features">Features</a>
-      <a class="hide-sm" href="#discord">Discord</a>
+      <a class="hide-sm" href="#pricing">Pricing</a>
       <a class="btn btn-primary btn-sm" data-dl target="_blank" rel="noopener">Download</a>
     </nav>
   </div>
@@ -577,9 +631,9 @@
         <p>Queued → authenticating → starting → running → closed, with PID and uptime for each. If Roblox is mid-update it says so with a clock, and retries once on its own instead of dying quietly.</p>
       </div>
       <div class="feat">
-        <span class="feat-key">Build</span>
+        <span class="feat-key">Footprint</span>
         <h3>One file, no runtime</h3>
-        <p>A single 252 KB executable. No installer, no admin rights, no NuGet packages — it compiles with the C# compiler already inside Windows. The JSON parser, dark theme and animation engine are all hand-written.</p>
+        <p>A single 252 KB executable with no dependencies at all — no installer, no admin rights, no bundled runtime, no third-party libraries. It starts in under two seconds and you can move it anywhere.</p>
       </div>
     </div>
   </div>
@@ -658,29 +712,80 @@
   </div>
 </section>
 
+<section id="pricing">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">Pricing</p>
+      <h2>Pay for the time you actually want.</h2>
+      <p>
+        One key unlocks everything — there is no cut-down tier. Short keys exist so you can try it
+        on your own accounts before committing to a long one.
+      </p>
+    </div>
+
+    <div class="tiers">
+      <div class="tier"><div class="dur">1 day</div><div class="amt">₱20</div></div>
+      <div class="tier"><div class="dur">3 days</div><div class="amt">₱40</div></div>
+      <div class="tier"><div class="dur">7 days</div><div class="amt">₱70</div></div>
+      <div class="tier"><div class="dur">30 days</div><div class="amt">₱150</div></div>
+      <div class="tier"><div class="dur">1 year</div><div class="amt">₱700</div></div>
+      <div class="tier best">
+        <div class="dur">Lifetime</div><div class="amt">₱1,000</div>
+        <span class="tag">best value</span>
+      </div>
+    </div>
+
+    <div class="included">
+      <span><b>✓</b> Every feature, every tier</span>
+      <span><b>✓</b> Unlimited accounts</span>
+      <span><b>✓</b> Free updates while your key is active</span>
+      <span><b>✓</b> Activated offline — no account, no sign-in</span>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap">
+    <div class="contact">
+      <div>
+        <p class="eyebrow">Get a key</p>
+        <h2 style="margin-top:10px;font-size:clamp(1.4rem,2.8vw,1.9rem)">Message me on Discord.</h2>
+        <p class="lede" style="margin-top:12px">
+          Tell me which duration you want. I'll send the key and you paste it on first launch —
+          that's the whole process.
+        </p>
+        <div class="handle">
+          <span>@</span><span id="dcuser">n1euxz</span>
+          <button type="button" id="copyuser">Copy</button>
+        </div>
+      </div>
+      <div class="cta-row" style="margin-top:0">
+        <a class="btn btn-primary" data-invite target="_blank" rel="noopener" hidden>Join the Discord</a>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section>
   <div class="wrap">
     <div class="get">
       <p class="eyebrow">Get it</p>
-      <h2 style="margin-top:10px">Download, double-click, add an account.</h2>
+      <h2 style="margin-top:10px">Download, paste your key, add an account.</h2>
       <p class="lede" style="margin-top:14px">
-        No installer and no runtime download — .NET Framework 4.x is already on every Windows
-        10 and 11 machine. Or build it yourself in one command with the compiler Windows ships.
+        No installer and no runtime download — .NET Framework 4.x is already on every Windows 10
+        and 11 machine. Your key is checked on your own PC, so there's no account to make and
+        nothing about you is sent anywhere.
       </p>
       <div class="cta-row">
         <a class="btn btn-primary" data-dl target="_blank" rel="noopener">Download NeuzBlox.exe</a>
-        <a class="btn btn-ghost" href="https://github.com/neuzgg" target="_blank" rel="noopener">Source on GitHub</a>
       </div>
       <div class="specs">
         <span><b>OS</b> Windows 7+</span>
         <span><b>Size</b> 252 KB</span>
         <span><b>Runtime</b> .NET Framework 4.x</span>
         <span><b>Admin</b> not required</span>
-        <span><b>Build</b> build.cmd</span>
+        <span><b>Activation</b> licence key</span>
       </div>
-<pre style="margin-top:22px"><span class="c"># the whole build — no SDK, no packages</span>
-build.cmd
-<span class="c">→</span> Done -&gt; NeuzBlox.exe</pre>
     </div>
   </div>
 </section>
@@ -690,27 +795,78 @@ build.cmd
     <div class="brandline" style="font-size:.95rem">
       <span class="mark" style="width:22px;height:22px;font-size:13px"><span>N</span></span> NeuzBlox
     </div>
-    <div>Made by <a href="https://github.com/neuzgg" target="_blank" rel="noopener">neuzgg</a> · source on GitHub</div>
+    <div>Made by <a href="https://github.com/neuzgg" target="_blank" rel="noopener">neuzgg</a></div>
     <div>Not affiliated with or endorsed by Roblox Corporation.</div>
   </div>
 </footer>
 
 <script>
   /* ===========================================================
-     PUT YOUR DOWNLOAD LINK HERE.
-     Example: "https://www.mediafire.com/file/xxxx/NeuzBlox.exe/file"
+     EDIT THESE TWO LINES.
+
+     DOWNLOAD_URL — point at a PAGE, not a raw .exe. A GitHub
+       release page, MediaFire / Drive / Dropbox page. Browsers
+       block a page from starting a file download itself, but a
+       link to a hosting page always opens.
+
+     DISCORD_INVITE — your server invite, e.g.
+       "https://discord.gg/abcdefg". Leave it empty and the
+       "Join the Discord" button simply hides itself, so the
+       page is never broken — your @username still shows.
      =========================================================== */
   var DOWNLOAD_URL = "";
+  var DISCORD_INVITE = "";
 
   (function () {
     var FALLBACK = "https://github.com/neuzgg";
+
     var url = (DOWNLOAD_URL || "").trim() || FALLBACK;
-    var links = document.querySelectorAll("[data-dl]");
-    for (var i = 0; i < links.length; i++) {
-      links[i].setAttribute("href", url);
-      links[i].setAttribute("title", url === FALLBACK
+    var dl = document.querySelectorAll("[data-dl]");
+    for (var i = 0; i < dl.length; i++) {
+      dl[i].setAttribute("href", url);
+      dl[i].setAttribute("title", url === FALLBACK
         ? "Download link not set yet — opening GitHub instead"
         : "Download NeuzBlox.exe");
+    }
+
+    var invite = (DISCORD_INVITE || "").trim();
+    var join = document.querySelectorAll("[data-invite]");
+    for (var j = 0; j < join.length; j++) {
+      if (invite) {
+        join[j].setAttribute("href", invite);
+        join[j].hidden = false;
+      } else {
+        join[j].hidden = true;   // no dead link when there is no server yet
+      }
+    }
+
+    var btn = document.getElementById("copyuser");
+    var who = document.getElementById("dcuser");
+    if (btn && who) {
+      btn.addEventListener("click", function () {
+        var name = who.textContent;
+        var done = function () {
+          btn.textContent = "Copied";
+          setTimeout(function () { btn.textContent = "Copy"; }, 1600);
+        };
+        try {
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(name).then(done, function () {});
+            return;
+          }
+        } catch (e) { /* fall through to the manual path below */ }
+
+        // older browsers and locked-down frames: select it so Ctrl+C works
+        try {
+          var r = document.createRange();
+          r.selectNodeContents(who);
+          var s = window.getSelection();
+          s.removeAllRanges();
+          s.addRange(r);
+          btn.textContent = "Press Ctrl+C";
+          setTimeout(function () { btn.textContent = "Copy"; }, 2400);
+        } catch (e2) { /* nothing more we can do */ }
+      });
     }
   })();
 </script>
