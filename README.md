@@ -181,6 +181,34 @@ Leave it empty to use the built-in one.
 
 ---
 
+## Pricing
+
+| 1 day | 3 days | 7 days | 30 days | 1 year | Lifetime |
+|:--:|:--:|:--:|:--:|:--:|:--:|
+| ₱20 | ₱40 | ₱70 | ₱150 | ₱700 | **₱1,000** |
+
+One key unlocks everything — there is no cut-down tier. Short keys exist so you can try it on your
+own accounts before committing to a long one. Free updates while your key is active.
+
+**To get a key, message `@n1euxz` on Discord** and say which duration you want.
+
+---
+
+## Activation
+
+NeuzBlox is key-activated. Paste the key you were given on first launch — it's checked on
+your own PC, with no account, no sign-in, and nothing about you sent anywhere.
+
+Keys can be time-limited (1 day through lifetime) and optionally locked to one device. If you
+were asked for a **device ID**, the activation screen shows it with a Copy button. That ID is a
+one-way hash of a Windows install identifier — it says nothing about you or your machine
+anywhere else.
+
+Expired keys, keys for another device, and edited keys are each reported plainly rather than
+failing with a generic error.
+
+---
+
 ## Your accounts stay on your machine
 
 | What | Where |
@@ -223,45 +251,16 @@ constantly signing in and out.
 
 ---
 
-## Build from source
+## Under the hood
 
-Nothing to install. It builds with the C# compiler that ships inside Windows.
+One executable, 252 KB, written in C# on WinForms. It has **no dependencies at all** — no NuGet
+packages, no bundled runtime, no third-party libraries. The JSON parser, the dark theme and its
+controls, the animation engine, the Discord presence client and the licence verification are all
+written from scratch for this project.
 
-```bat
-build.cmd
-```
+That is why it is a single file you can move anywhere, and why it starts in under two seconds.
 
-That regenerates the icon and produces `NeuzBlox.exe` in the project root.
-
-```
-src/      application source
-  Program.cs        entry point, single-instance guard, TLS setup
-  Splash.cs         loading screen (does the slow half of startup)
-  MainForm.cs       shell, pages, launch orchestration
-  Anim.cs           easing engine, one shared 60fps clock
-  MultiInstance.cs  the singleton-lock holder
-  RobloxApi.cs      auth ticket, whoami, thumbnails, game icons
-  RobloxClient.cs   client discovery, join targets, launch URI
-  GameWatcher.cs    reads client logs to find the live game
-  DiscordRpc.cs     rich presence over Discord's IPC pipe
-  Instances.cs      instance lifecycle, watchdog, window tiling
-  Config.cs         settings + DPAPI account vault
-  Theme.cs          dark theme and custom controls
-  AccountCard.cs    account row
-  InstanceCard.cs   instance row
-  Dialogs.cs        modal shells, add/edit account
-  Native.cs         Win32 interop
-  Json.cs           minimal JSON reader/writer
-tools/    dev helpers (icon + art generators, self test, RPC probe)
-art/      Discord Rich Presence art assets
-docs/     landing page (served by GitHub Pages)
-```
-
-No third-party code: the JSON parser, dark theme, animation engine and Discord presence client are
-all hand-written.
-
-`tools/SelfTest.cs` exercises the non-UI plumbing — client discovery, link parsing, launch-URI
-shape, Roblox connectivity and the account vault — without needing a real account.
+Source is not public.
 
 ---
 
