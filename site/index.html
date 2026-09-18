@@ -1,0 +1,716 @@
+<title>NeuzBlox</title>
+
+<!--
+  ============================================================
+   EDIT ONE LINE:  put your download link in DOWNLOAD_URL
+   (it is at the very bottom of this file, in the <script>)
+
+   Point it at a PAGE, not a raw .exe — a GitHub release page,
+   a MediaFire / Drive / Dropbox page. Browsers and embedded
+   viewers block a page from starting a file download itself,
+   but a normal link to a hosting page always opens.
+
+   Leave it as-is and every Download button quietly falls back
+   to your GitHub, so the site is never broken.
+  ============================================================
+-->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+
+<style>
+  /* NeuzBlox is a dark Windows utility; the page commits to that one world on
+     purpose rather than shipping a second theme. Every colour is painted
+     explicitly so the page holds on any host ground. */
+  :root {
+    --ground:   #0A0C11;
+    --surface:  #12151D;
+    --surface2: #171B25;
+    --surface3: #1E2330;
+    --line:     #232838;
+    --line2:    #2E3547;
+    --ink:      #E7EAF3;
+    --ink2:     #98A1B6;
+    --ink3:     #616A80;
+    --accent:   #6C8CFF;
+    --accent2:  #9B6CFF;
+    --live:     #35D07F;
+    --warn:     #FFB648;
+    --alert:    #FF5C6C;
+
+    --display: "Archivo", "Segoe UI", system-ui, sans-serif;
+    --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+
+    --measure: 62ch;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--body);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  .wrap {
+    width: 100%;
+    max-width: 1120px;
+    margin-inline: auto;
+    padding-inline: 20px;
+  }
+
+  section { padding-block: clamp(56px, 9vw, 104px); }
+
+  h1, h2, h3 { font-family: var(--display); text-wrap: balance; margin: 0; letter-spacing: -0.022em; }
+  h1 { font-size: clamp(2.3rem, 6.2vw, 4rem); font-weight: 800; line-height: 1.02; }
+  h2 { font-size: clamp(1.7rem, 3.6vw, 2.5rem); font-weight: 700; line-height: 1.1; }
+  h3 { font-size: 1.05rem; font-weight: 700; letter-spacing: -0.01em; }
+  p { margin: 0; }
+
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink3);
+  }
+
+  .lede { color: var(--ink2); font-size: 1.06rem; max-width: var(--measure); }
+
+  a { color: var(--accent); }
+
+  code, .mono { font-family: var(--mono); font-size: 0.85em; }
+
+  /* ---------- brand mark ---------- */
+  .mark {
+    display: grid;
+    place-items: center;
+    border-radius: 23.5%;
+    background: linear-gradient(140deg, var(--accent), var(--accent2));
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.28);
+    font-family: var(--display);
+    font-weight: 800;
+    color: #fff;
+    flex: none;
+  }
+  .mark span { transform: translateY(-3%); }
+
+  /* ---------- top bar ---------- */
+  .topbar {
+    position: sticky;
+    top: env(safe-area-inset-top, 0px);
+    z-index: 40;
+    background: rgba(10,12,17,.82);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--line);
+  }
+  .topbar .row {
+    display: flex; align-items: center; gap: 14px;
+    height: 62px;
+  }
+  .brandline { display: flex; align-items: center; gap: 11px; font-family: var(--display); font-weight: 700; letter-spacing: -0.02em; font-size: 1.05rem; }
+  .brandline .mark { width: 28px; height: 28px; font-size: 16px; }
+  .topbar nav { margin-left: auto; display: flex; gap: 22px; align-items: center; }
+  .topbar nav a { color: var(--ink2); text-decoration: none; font-size: 0.9rem; }
+  .topbar nav a:hover { color: var(--ink); }
+  @media (max-width: 720px) { .topbar nav .hide-sm { display: none; } }
+
+  /* ---------- buttons ---------- */
+  .btn {
+    display: inline-flex; align-items: center; gap: 9px;
+    padding: 11px 18px;
+    border-radius: 10px;
+    font-family: var(--body);
+    font-weight: 600;
+    font-size: 0.94rem;
+    text-decoration: none;
+    border: 1px solid transparent;
+    transition: transform .16s ease, box-shadow .16s ease, background .16s ease, border-color .16s ease;
+    white-space: nowrap;
+  }
+  .btn-primary {
+    background: linear-gradient(120deg, var(--accent), var(--accent2));
+    color: #fff;
+    box-shadow: 0 6px 22px -8px rgba(124,124,255,.75);
+  }
+  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 12px 30px -10px rgba(124,124,255,.9); }
+  .btn-ghost { background: var(--surface2); color: var(--ink); border-color: var(--line2); }
+  .btn-ghost:hover { border-color: #3C4560; transform: translateY(-1px); }
+  .btn-sm { padding: 7px 14px; font-size: 0.86rem; border-radius: 8px; }
+  .btn[data-dl]:not([href]) { cursor: default; }
+
+  /* ---------- hero ---------- */
+  .hero { position: relative; padding-top: clamp(40px, 7vw, 76px); }
+  .hero::before {
+    content: "";
+    position: absolute; inset: -20% -30% auto -30%;
+    height: 620px;
+    background:
+      radial-gradient(48% 52% at 22% 34%, rgba(108,140,255,.20), transparent 68%),
+      radial-gradient(42% 46% at 76% 22%, rgba(155,108,255,.17), transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .hero .wrap { position: relative; z-index: 1; }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.02fr);
+    gap: clamp(34px, 5vw, 64px);
+    align-items: center;
+  }
+  @media (max-width: 940px) { .hero-grid { grid-template-columns: minmax(0,1fr); } }
+
+  .hero h1 { margin-top: 16px; }
+  .hero .lede { margin-top: 18px; font-size: 1.12rem; }
+  .cta-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+  .under-cta {
+    margin-top: 16px;
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    color: var(--ink3);
+    display: flex; flex-wrap: wrap; gap: 6px 14px;
+  }
+
+  /* ---------- the diorama: the app, rebuilt in HTML ---------- */
+  .diorama { position: relative; min-width: 0; }
+  .ghost {
+    position: absolute;
+    border: 1px solid var(--line2);
+    border-radius: 11px;
+    background: linear-gradient(160deg, #141925, #0E121A);
+    box-shadow: 0 24px 48px -28px #000;
+    overflow: hidden;
+  }
+  .ghost .gbar {
+    height: 24px;
+    border-bottom: 1px solid var(--line);
+    display: flex; align-items: center; gap: 7px;
+    padding-inline: 9px;
+    font-size: 10px;
+    font-family: var(--mono);
+    color: var(--ink3);
+    background: #10141C;
+  }
+  .ghost .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--live); flex: none; }
+  .ghost .gbody { padding: 12px; display: grid; gap: 7px; }
+  .ghost .gline { height: 6px; border-radius: 3px; background: #1C2230; }
+  .ghost .gline.w1 { width: 72%; }
+  .ghost .gline.w2 { width: 48%; }
+  .ghost .gline.w3 { width: 60%; }
+
+  .ghost-a { top: -22px; right: 6px; width: 46%; }
+  .ghost-b { top: 26px; right: -10px; width: 40%; opacity: .7; }
+  @media (max-width: 560px) { .ghost-a, .ghost-b { display: none; } }
+
+  .app {
+    position: relative;
+    border: 1px solid var(--line2);
+    border-radius: 13px;
+    background: var(--surface);
+    box-shadow: 0 40px 80px -34px #000, 0 0 0 1px rgba(255,255,255,.02) inset;
+    overflow: hidden;
+    margin-top: 44px;
+  }
+  .app-bar {
+    display: flex; align-items: center; gap: 9px;
+    padding: 9px 12px;
+    background: #0E1119;
+    border-bottom: 1px solid var(--line);
+    font-size: 0.78rem;
+    color: var(--ink2);
+  }
+  .app-bar .mark { width: 15px; height: 15px; font-size: 9px; border-radius: 4px; }
+  .app-bar .win { margin-left: auto; display: flex; gap: 14px; color: var(--ink3); font-size: 0.7rem; letter-spacing: .1em; }
+
+  .app-body { display: grid; grid-template-columns: 138px minmax(0,1fr); }
+  @media (max-width: 520px) { .app-body { grid-template-columns: 1fr; } .app-rail { display: none; } }
+
+  .app-rail { background: var(--surface); border-right: 1px solid var(--line); padding: 13px 10px; display: grid; gap: 3px; align-content: start; }
+  .rail-item {
+    display: flex; align-items: center; gap: 9px;
+    padding: 7px 9px; border-radius: 7px;
+    font-size: 0.79rem; color: var(--ink2);
+  }
+  .rail-item.on { background: #1E2438; color: var(--ink); position: relative; }
+  .rail-item.on::before { content: ""; position: absolute; left: 0; top: 9px; bottom: 9px; width: 3px; border-radius: 2px; background: var(--accent); }
+  .rail-glyph { width: 13px; height: 13px; border-radius: 3px; background: #2A3146; flex: none; }
+  .rail-item.on .rail-glyph { background: linear-gradient(135deg, var(--accent), var(--accent2)); }
+
+  .app-main { padding: 14px; display: grid; gap: 9px; min-width: 0; }
+  .acct {
+    display: flex; align-items: center; gap: 11px;
+    padding: 10px 12px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: var(--surface2);
+    min-width: 0;
+  }
+  .acct.sel { border-color: var(--accent); background: #1A2033; }
+  .avatar { width: 30px; height: 30px; border-radius: 50%; flex: none; display: grid; place-items: center; font-size: 11px; font-weight: 600; font-family: var(--display); }
+  .acct-txt { min-width: 0; }
+  .acct-name { font-size: 0.85rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .acct-sub { font-family: var(--mono); font-size: 0.68rem; color: var(--ink3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .pill {
+    margin-left: auto; flex: none;
+    font-family: var(--mono); font-size: 0.63rem;
+    padding: 3px 9px; border-radius: 99px;
+    letter-spacing: .04em;
+  }
+  .pill-live { color: var(--live); background: rgba(53,208,127,.13); }
+  .pill-ready { color: var(--accent); background: rgba(108,140,255,.14); }
+  .pill-wait { color: var(--warn); background: rgba(255,182,72,.13); }
+
+  .pulse { animation: pulse 2.4s ease-in-out infinite; }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .45; } }
+
+  .app-foot {
+    border-top: 1px solid var(--line);
+    padding: 8px 13px;
+    font-family: var(--mono); font-size: 0.68rem; color: var(--ink3);
+    display: flex; gap: 8px; flex-wrap: wrap;
+  }
+
+  /* ---------- section headers ---------- */
+  .sec-head { max-width: var(--measure); margin-bottom: clamp(30px, 4vw, 46px); }
+  .sec-head h2 { margin-top: 10px; }
+  .sec-head p { margin-top: 14px; color: var(--ink2); }
+
+  /* ---------- steps: this really is a sequence, so it is numbered ---------- */
+  .steps { display: grid; gap: 18px; }
+  .step {
+    display: grid;
+    grid-template-columns: 46px minmax(0,1fr);
+    gap: 20px;
+    padding: 22px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: linear-gradient(180deg, var(--surface), #0F131B);
+  }
+  @media (max-width: 600px) { .step { grid-template-columns: minmax(0,1fr); gap: 14px; } }
+  .step-n {
+    font-family: var(--display); font-weight: 800; font-size: 1.1rem;
+    width: 38px; height: 38px; border-radius: 10px;
+    display: grid; place-items: center;
+    color: var(--accent);
+    background: rgba(108,140,255,.12);
+    border: 1px solid rgba(108,140,255,.26);
+  }
+  .step h3 { margin-bottom: 8px; }
+  .step p { color: var(--ink2); font-size: 0.96rem; max-width: var(--measure); }
+
+  pre {
+    margin: 14px 0 0;
+    padding: 13px 15px;
+    background: #0B0E15;
+    border: 1px solid var(--line);
+    border-radius: 9px;
+    overflow-x: auto;
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    line-height: 1.7;
+    color: #C7CEDF;
+  }
+  pre .k { color: var(--accent2); }
+  pre .s { color: var(--live); }
+  pre .c { color: var(--ink3); }
+  pre .w { color: var(--warn); }
+
+  /* ---------- features ---------- */
+  .grid3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(255px, 1fr)); gap: 16px; }
+  .feat { padding: 20px; border: 1px solid var(--line); border-radius: 13px; background: var(--surface); transition: border-color .18s ease, transform .18s ease; }
+  .feat:hover { border-color: var(--line2); transform: translateY(-2px); }
+  .feat h3 { margin-bottom: 7px; }
+  .feat p { color: var(--ink2); font-size: 0.92rem; }
+  .feat-key { font-family: var(--mono); font-size: 0.7rem; color: var(--accent); letter-spacing: .06em; text-transform: uppercase; display: block; margin-bottom: 11px; }
+
+  /* ---------- discord ---------- */
+  .disc-grid { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,420px); gap: clamp(28px,4vw,52px); align-items: center; }
+  @media (max-width: 860px) { .disc-grid { grid-template-columns: minmax(0,1fr); } }
+
+  .presence {
+    border: 1px solid var(--line2);
+    border-radius: 12px;
+    background: #1B1D24;
+    padding: 16px;
+    box-shadow: 0 30px 60px -30px #000;
+  }
+  .presence .ptitle { font-size: 0.68rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: #B6BDCC; margin-bottom: 12px; }
+  .presence .prow { display: flex; gap: 14px; align-items: flex-start; }
+  .art { position: relative; width: 74px; height: 74px; flex: none; }
+  .art-big {
+    width: 74px; height: 74px; border-radius: 9px;
+    background: linear-gradient(145deg, #2F7BE8, #17C3B2 55%, #FFD166);
+    display: grid; place-items: center;
+    font-family: var(--display); font-weight: 800; font-size: 0.7rem; color: rgba(255,255,255,.92);
+    text-align: center; line-height: 1.1; padding: 6px;
+  }
+  .art-small {
+    position: absolute; right: -7px; bottom: -7px;
+    width: 27px; height: 27px; border-radius: 50%;
+    border: 3px solid #1B1D24;
+    font-size: 13px;
+  }
+  .ptxt { min-width: 0; }
+  .pname { font-weight: 600; font-size: 0.94rem; }
+  .pline { font-size: 0.84rem; color: #C3C9D6; }
+  .pline.dim { color: #9AA2B2; }
+  .pbtn { margin-top: 11px; display: block; text-align: center; padding: 7px; border-radius: 6px; background: #3F444F; color: #E4E7EE; font-size: 0.8rem; font-weight: 600; text-decoration: none; }
+
+  /* ---------- honest ---------- */
+  .two { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px,1fr)); gap: 16px; }
+  .panel { padding: 22px; border-radius: 14px; border: 1px solid var(--line); background: var(--surface); }
+  .panel h3 { margin-bottom: 12px; }
+  .panel ul { margin: 0; padding-left: 18px; color: var(--ink2); font-size: 0.94rem; display: grid; gap: 7px; }
+  .panel.warn { border-color: rgba(255,182,72,.3); background: linear-gradient(180deg, rgba(255,182,72,.06), transparent); }
+  .panel.warn h3 { color: var(--warn); }
+
+  /* ---------- get it ---------- */
+  .get { border: 1px solid var(--line2); border-radius: 16px; padding: clamp(24px,4vw,40px); background: linear-gradient(150deg, #151A27, #0D1017); }
+  .specs { display: flex; flex-wrap: wrap; gap: 10px 26px; margin-top: 22px; font-family: var(--mono); font-size: 0.78rem; color: var(--ink3); }
+  .specs b { color: var(--ink2); font-weight: 500; }
+
+  /* ---------- footer ---------- */
+  footer { border-top: 1px solid var(--line); padding-block: 34px; }
+  .foot-row { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; justify-content: space-between; font-size: 0.85rem; color: var(--ink3); }
+  .foot-row a { color: var(--ink2); text-decoration: none; }
+  .foot-row a:hover { color: var(--ink); }
+
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
+</style>
+
+<header class="topbar">
+  <div class="wrap row">
+    <div class="brandline"><span class="mark" style="width:28px;height:28px;font-size:16px"><span>N</span></span> NeuzBlox</div>
+    <nav>
+      <a class="hide-sm" href="#how">How it works</a>
+      <a class="hide-sm" href="#features">Features</a>
+      <a class="hide-sm" href="#discord">Discord</a>
+      <a class="btn btn-primary btn-sm" data-dl target="_blank" rel="noopener">Download</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <p class="eyebrow">Windows · 252 KB · no installer</p>
+        <h1>Run every Roblox account at once.</h1>
+        <p class="lede">
+          Roblox opens one client and refuses the rest. NeuzBlox holds the lock it checks,
+          then signs each window into a different account — main on the left, alts beside it,
+          all live at the same time.
+        </p>
+        <div class="cta-row">
+          <a class="btn btn-primary" data-dl target="_blank" rel="noopener">Download for Windows</a>
+          <a class="btn btn-ghost" href="#how">How it works</a>
+        </div>
+        <p class="under-cta">
+          <span>NeuzBlox.exe</span><span>·</span><span>252 KB</span><span>·</span>
+          <span>Windows 7+</span><span>·</span><span>no admin rights</span>
+        </p>
+      </div>
+
+      <div class="diorama">
+        <div class="ghost ghost-a">
+          <div class="gbar"><span class="dot"></span> Alt 1 — NeuzBlox</div>
+          <div class="gbody"><span class="gline w1"></span><span class="gline w3"></span><span class="gline w2"></span></div>
+        </div>
+        <div class="ghost ghost-b">
+          <div class="gbar"><span class="dot"></span> Alt 2 — NeuzBlox</div>
+          <div class="gbody"><span class="gline w2"></span><span class="gline w1"></span><span class="gline w3"></span></div>
+        </div>
+
+        <div class="app">
+          <div class="app-bar">
+            <span class="mark"><span>N</span></span> NeuzBlox
+            <span class="win">— ▢ ✕</span>
+          </div>
+          <div class="app-body">
+            <div class="app-rail">
+              <div class="rail-item on"><span class="rail-glyph"></span> Accounts</div>
+              <div class="rail-item"><span class="rail-glyph"></span> Instances</div>
+              <div class="rail-item"><span class="rail-glyph"></span> Settings</div>
+              <div class="rail-item"><span class="rail-glyph"></span> Credits</div>
+            </div>
+            <div class="app-main">
+              <div class="acct sel">
+                <span class="avatar" style="background:rgba(108,140,255,.2);color:#6C8CFF">NE</span>
+                <span class="acct-txt">
+                  <span class="acct-name">neuz</span>
+                  <span class="acct-sub">@MrJhay13 · 1387698420</span>
+                </span>
+                <span class="pill pill-live">running</span>
+              </div>
+              <div class="acct">
+                <span class="avatar" style="background:rgba(155,108,255,.2);color:#9B6CFF">A1</span>
+                <span class="acct-txt">
+                  <span class="acct-name">Alt 1</span>
+                  <span class="acct-sub">@Eikkoo0 · 5634387076</span>
+                </span>
+                <span class="pill pill-live">running</span>
+              </div>
+              <div class="acct">
+                <span class="avatar" style="background:rgba(53,208,127,.18);color:#35D07F">A2</span>
+                <span class="acct-txt">
+                  <span class="acct-name">Alt 2</span>
+                  <span class="acct-sub">@farm_acct · 4410238891</span>
+                </span>
+                <span class="pill pill-wait pulse">starting</span>
+              </div>
+            </div>
+          </div>
+          <div class="app-foot">
+            <span>MULTI-INSTANCE</span><span style="color:var(--live)">Unlocked</span>
+            <span style="margin-left:auto">3 accounts · client 0.739.0.7390687</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="how">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">How it works</p>
+      <h2>Three moving parts, none of them a hack.</h2>
+      <p>
+        Nothing is patched, no memory is read or written, no code is injected into Roblox,
+        and no gameplay is automated. NeuzBlox starts clients and arranges windows.
+      </p>
+    </div>
+
+    <div class="steps">
+      <article class="step">
+        <div class="step-n">1</div>
+        <div>
+          <h3>Hold the lock Roblox checks</h3>
+          <p>
+            On startup the client claims a named Windows kernel object. A second copy finds it
+            already taken, hands off to the first client and quits — that is the whole reason you
+            only get one window. NeuzBlox claims it first and keeps it, so every client that
+            follows just keeps running.
+          </p>
+<pre><span class="k">new</span> Mutex(<span class="k">false</span>, <span class="s">"ROBLOX_singletonMutex"</span>, <span class="k">out</span> createdNew);
+<span class="c">// held on a dedicated thread for the app's lifetime —
+// mutex ownership dies with the thread that took it</span></pre>
+        </div>
+      </article>
+
+      <article class="step">
+        <div class="step-n">2</div>
+        <div>
+          <h3>Mint one launch ticket per account</h3>
+          <p>
+            When you press Play on the website, Roblox issues a single-use authentication ticket
+            for your session. NeuzBlox asks for exactly the same thing, once per saved account —
+            which is what puts a different login in each window instead of three copies of one.
+          </p>
+<pre><span class="k">POST</span> https://auth.roblox.com/v1/authentication-ticket
+<span class="c">→</span> rbx-authentication-ticket: <span class="s">&lt;single-use ticket&gt;</span></pre>
+        </div>
+      </article>
+
+      <article class="step">
+        <div class="step-n">3</div>
+        <div>
+          <h3>Hand the ticket to a fresh client</h3>
+          <p>
+            The ticket goes to the client in the same launch URI your browser would send. NeuzBlox
+            asks Roblox which build is current first — launching any other one makes the client
+            bounce through its own installer, which then opens a window you never authenticated.
+          </p>
+<pre>roblox-player:1+launchmode:play
+  +gameinfo:<span class="s">&lt;ticket&gt;</span>
+  +placelauncherurl:<span class="s">&lt;url-encoded PlaceLauncher&gt;</span>
+  +browsertrackerid:<span class="s">&lt;id&gt;</span>+robloxLocale:en_us</pre>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="features">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">What you get</p>
+      <h2>Built for running four clients without losing track of them.</h2>
+    </div>
+
+    <div class="grid3">
+      <div class="feat">
+        <span class="feat-key">Accounts</span>
+        <h3>Saved sessions, encrypted</h3>
+        <p>Unlimited accounts with their own alias, note and avatar. Sessions are sealed with Windows DPAPI under your user — another Windows account on the same PC cannot read them, and the file is useless on another machine.</p>
+      </div>
+      <div class="feat">
+        <span class="feat-key">Launching</span>
+        <h3>One click, staggered</h3>
+        <p>Launch one, the ticked ones, or everything. Clients start a few seconds apart and one at a time, because Roblox rate-limits rapid logins and two simultaneous updaters abort each other.</p>
+      </div>
+      <div class="feat">
+        <span class="feat-key">Destinations</span>
+        <h3>Anywhere you can join</h3>
+        <p>The Roblox home app, a place link or ID, a private server link, a specific server by job ID, or follow a friend into their game. Save any of them as a preset.</p>
+      </div>
+      <div class="feat">
+        <span class="feat-key">Windows</span>
+        <h3>Tiled and labelled</h3>
+        <p>Every client's title bar gets renamed to its account, so you can tell them apart on the taskbar. One click tiles them all — grid, columns, rows or cascade.</p>
+      </div>
+      <div class="feat">
+        <span class="feat-key">Instances</span>
+        <h3>Live state, not guesswork</h3>
+        <p>Queued → authenticating → starting → running → closed, with PID and uptime for each. If Roblox is mid-update it says so with a clock, and retries once on its own instead of dying quietly.</p>
+      </div>
+      <div class="feat">
+        <span class="feat-key">Build</span>
+        <h3>One file, no runtime</h3>
+        <p>A single 252 KB executable. No installer, no admin rights, no NuGet packages — it compiles with the C# compiler already inside Windows. The JSON parser, dark theme and animation engine are all hand-written.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="discord">
+  <div class="wrap">
+    <div class="disc-grid">
+      <div>
+        <p class="eyebrow">Rich presence</p>
+        <h2>Your friends see the game, not a generic status.</h2>
+        <p class="lede" style="margin-top:14px">
+          When every client is in the same game, the big tile is that game's own Roblox art and
+          the text is its name. Mixed games, the home app, or nothing running fall back to the
+          NeuzBlox mark.
+        </p>
+        <p class="lede" style="margin-top:14px">
+          It talks to your Discord client over its local pipe — no library, no account linking,
+          nothing leaves the machine. Tick one box and it works; the application ID ships inside
+          the app, so there is nothing to paste.
+        </p>
+        <p class="under-cta" style="margin-top:18px">
+          <span>\\.\pipe\discord-ipc-N</span><span>·</span><span>off by default</span>
+          <span>·</span><span>account names stay hidden unless you ask</span>
+        </p>
+      </div>
+
+      <div class="presence">
+        <div class="ptitle">Playing a game</div>
+        <div class="prow">
+          <div class="art">
+            <div class="art-big">GAME<br>ICON</div>
+            <span class="mark art-small"><span>N</span></span>
+          </div>
+          <div class="ptxt">
+            <div class="pname">NeuzBlox</div>
+            <div class="pline">Adopt Me!</div>
+            <div class="pline dim">3 clients running</div>
+            <div class="pline dim mono" style="font-size:.72rem;margin-top:3px">01:42 elapsed</div>
+          </div>
+        </div>
+        <a class="pbtn" href="https://github.com/neuzgg">NeuzBlox on GitHub</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">Straight answers</p>
+      <h2>What it does not do.</h2>
+    </div>
+    <div class="two">
+      <div class="panel">
+        <h3>Not an exploit</h3>
+        <ul>
+          <li>No files patched, no memory read or written</li>
+          <li>No code injected into the Roblox process</li>
+          <li>No gameplay automated, no inputs sent</li>
+          <li>Nothing hidden from Roblox — it launches clients the same way the website does</li>
+          <li>Nothing uploaded anywhere except roblox.com</li>
+        </ul>
+      </div>
+      <div class="panel warn">
+        <h3>Treat a cookie like a password</h3>
+        <ul>
+          <li>A <code>.ROBLOSECURITY</code> value is a full login — no password prompt, no 2FA</li>
+          <li>Only ever paste one you copied yourself, from your own browser</li>
+          <li>Never paste one into a site or tool you do not trust</li>
+          <li>"Log out of all sessions" on roblox.com kills every saved cookie instantly — that is your kill switch</li>
+          <li>Alt accounts are allowed by Roblox; how you use them is between you and their Terms</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="get">
+      <p class="eyebrow">Get it</p>
+      <h2 style="margin-top:10px">Download, double-click, add an account.</h2>
+      <p class="lede" style="margin-top:14px">
+        No installer and no runtime download — .NET Framework 4.x is already on every Windows
+        10 and 11 machine. Or build it yourself in one command with the compiler Windows ships.
+      </p>
+      <div class="cta-row">
+        <a class="btn btn-primary" data-dl target="_blank" rel="noopener">Download NeuzBlox.exe</a>
+        <a class="btn btn-ghost" href="https://github.com/neuzgg" target="_blank" rel="noopener">Source on GitHub</a>
+      </div>
+      <div class="specs">
+        <span><b>OS</b> Windows 7+</span>
+        <span><b>Size</b> 252 KB</span>
+        <span><b>Runtime</b> .NET Framework 4.x</span>
+        <span><b>Admin</b> not required</span>
+        <span><b>Build</b> build.cmd</span>
+      </div>
+<pre style="margin-top:22px"><span class="c"># the whole build — no SDK, no packages</span>
+build.cmd
+<span class="c">→</span> Done -&gt; NeuzBlox.exe</pre>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot-row">
+    <div class="brandline" style="font-size:.95rem">
+      <span class="mark" style="width:22px;height:22px;font-size:13px"><span>N</span></span> NeuzBlox
+    </div>
+    <div>Made by <a href="https://github.com/neuzgg" target="_blank" rel="noopener">neuzgg</a> · source on GitHub</div>
+    <div>Not affiliated with or endorsed by Roblox Corporation.</div>
+  </div>
+</footer>
+
+<script>
+  /* ===========================================================
+     PUT YOUR DOWNLOAD LINK HERE.
+     Example: "https://www.mediafire.com/file/xxxx/NeuzBlox.exe/file"
+     =========================================================== */
+  var DOWNLOAD_URL = "";
+
+  (function () {
+    var FALLBACK = "https://github.com/neuzgg";
+    var url = (DOWNLOAD_URL || "").trim() || FALLBACK;
+    var links = document.querySelectorAll("[data-dl]");
+    for (var i = 0; i < links.length; i++) {
+      links[i].setAttribute("href", url);
+      links[i].setAttribute("title", url === FALLBACK
+        ? "Download link not set yet — opening GitHub instead"
+        : "Download NeuzBlox.exe");
+    }
+  })();
+</script>
